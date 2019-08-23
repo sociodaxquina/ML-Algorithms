@@ -1,0 +1,63 @@
+def encode_cyclical_features (df_loaded, col_timestamp, cycle):
+    
+    # Description: Encoding cyclical continuous features
+    # reference: https://www.kaggle.com/avanwyk/encoding-cyclical-features-for-deep-learning
+    # -----------------------------------------------------------------------------------
+    # col_timestamp format: 2019-04-19 01:15:00
+    # n_cycle_elements: number of elementsof the cycle
+    # return dataframe with with two additional columns: sin() and cos() encodded
+    # cycle: 'mod' = minute of the day
+    #         'hod' = hour of the day
+    #         'dow' = day of the week
+
+    print '[Starting] encode_cyclical_features'
+
+    # validate dataframe timestamp
+    print 'col data type: ' + str(df_loaded[col_timestamp].dtype)
+    if df_loaded[col_timestamp].dtype != np.datetime64:
+        df_loaded[col_timestamp] = df_loaded[col_timestamp].astype('datetime64[ns]')
+        print 'col data type: ' + str(df_loaded[col_timestamp].dtype) + '... [Fixed]'
+    else:
+        print 'col data type: ' + str(df_loaded[col_timestamp].dtype) + '... [OK]'
+
+    if df_loaded[col_timestamp].dtype == 'datetime64[ns]': 
+        print 'col data type: ' + str(df_loaded[col_timestamp].dtype) + '... [OK]'
+
+        # timestamp decomposition
+        day = df_loaded[col_timestamp].dt.day
+        day_of_week = df_loaded[col_timestamp].dt.dayofweek
+        hour_of_day = df_loaded[col_timestamp].dt.hour
+        minute_of_hour = df_loaded[col_timestamp].dt.minute
+        
+        if cycle == 'mod':
+            n_cycle_elements = 24*60
+            df_loaded[cycle] = hour_of_day*60 + minute_of_hour
+            
+        elif cycle == 'hod':
+            n_cycle_elements = 24
+            df_loaded[cycle] = hour_of_day
+
+        elif cycle == 'dow':
+            n_cycle_elements = 7
+            df_loaded[cycle] = day_of_week
+
+        # encoding
+        if pd.api.types.is_numeric_dtype(df_loaded[cycle]) == True:
+
+            col_name_sin = cycle + '_sin'
+            col_name_cos = cycle + '_cos'
+            df_loaded[col_name_sin] = np.sin(2*np.pi*df_loaded[cycle]/n_cycle_elements)
+            df_loaded[col_name_cos] = np.cos(2*np.pi*df_loaded[cycle]/n_cycle_elements)
+
+            print '[Success] encode_cyclical_features'
+
+        # validate results
+        print ''
+        print 'Validate results:'
+        print df_loaded.head(5).to_string()
+        print df_loaded.head(5).to_string()
+
+        # drop 
+        df_loaded = df_loaded.drop(columns=[cycle])
+
+    return df_loaded
