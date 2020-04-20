@@ -1,0 +1,11 @@
+## Data Correlations
+# intra-features:
+https://community.plotly.com/t/correlation-plot-with-mask/29185
+https://www.kdnuggets.com/2019/07/annotated-heatmaps-correlation-matrix.html
+https://towardsdatascience.com/why-feature-correlation-matters-a-lot-847e8ba439c4
+https://stats.stackexchange.com/questions/50537/should-one-remove-highly-correlated-variables-before-doing-pca
+https://chrisalbon.com/machine_learning/feature_selection/drop_highly_correlated_features/
+
+## Inputation Missing Values
+https://gist.github.com/lgondara/18387c5f4d745673e9ca8e23f3d7ebd3 # MIDA: Multiple Imputation using Denoising Autoencoders
+https://arxiv.org/pdf/1705.02737.pdf
