@@ -1,0 +1,58 @@
+## t-SNE
+
+###################################################################
+## What is t-SNE? How does it work using t-Distribution?         ##
+###################################################################
+https://theprofessionalspoint.blogspot.com/2019/03/what-is-t-sne-how-does-it-work-using-t.html
+
+t-SNE stands for t-Distributed Stochastic Neighbor Embedding. It is a non-linear dimensionality reduction algorithm. t-SNE uses normal distribution (in higher dimension) and t-Distribution (in lower dimension) to reduce the dimensions of the dataset. We will see it in detail. 
+
+As per documentation:
+“t-Distributed stochastic neighbor embedding (t-SNE) minimizes the divergence between two distributions: a distribution that measures pairwise similarities of the input objects and a distribution that measures pairwise similarities of the corresponding low-dimensional points in the embedding”.
+t-SNE is a technique to convert high-dimensional data into lower dimensional data while keeping the relative similarity of the data points as close to the original (in high dimensional space) as possible.
+
+Lets see how does t-SNE work? I will just illustrate a high level understanding of the algorithm (because even I don't understand the complex mathematics behind it :)).
+
+## Higher Dimension
+
+Step 1: Picks a data point (say P1), calculates its Euclidean distance from a neighboring data point (say P2) and converts this distance into the conditional probability using normal distribution.  Conditional probability represents the similarity between the pairs of data points.
+Step 2: Again it calculates the distance of P1 from other neighboring point (say P3) and does the same as in Step 1.
+It keeps doing same thing for all the data points. In this way t-SNE keeps computing pairwise conditional probabilities for each data point using normal distribution in higher dimension.
+
+To summarize, t-SNE measures the similarity between each and every pair of data points. Similar data points will have more value of similarity and the different data points will have less value. Then it converts that similarity distance to the conditional probability according to the normal distribution. It also creates a similarity matrix (say S1).
+
+## Lower Dimension
+
+Step 3: t-SNE arranges all of the data points randomly on the required lower dimension (say two dimensional space).
+Step 4: It again does the same calculations for all the data points in the lower dimension as it did for all the data points in the higher dimension in Step 1 and Step 2. The only difference is that it uses t-Distribution in this case instead of normal distribution. That is why, it is called t-SNE instead of simple SNE.
+
+It also creates a similarity matrix in lower dimension (say S2).
+Now t-SNE compares the similarity matrix S1 and S2 and tries to minimize the difference such that all the pairs have a similar probability distribution (both in higher and lower dimension). Gradient Descent is used with Kullback Leibler Divergence between the two distributions as a cost function. To measure the minimization of sum of difference of conditional probability, SNE minimizes the sum of Kullback-Leibler divergences of overall data points using a Gradient Descent method.
+
+## Difference between normal distribution and t-Distribution
+
+t-Distribution is a lot like a normal distribution. The only difference is that t-distribution is not as tall as normal distribution in middle but its tails are taller at the ends. 
+Why is t-Distribution used instead of normal distribution in lower dimension because without it the clusters would all clump up in the middle and will be harder to visualize.
+
+
+###################################################################
+## Advantages and Disadvantages of t-SNE over PCA (PCA vs t-SNE) ##
+###################################################################
+http://theprofessionalspoint.blogspot.com/2019/03/advantages-and-disadvantages-of-t-sne.html
+
+Both PCA (Principal Component Analysis) and t-SNE (t-Distributed Stochastic Neighbor Embedding) are the dimensionality reduction techniques in Machine Learning and efficient tools for data exploration and visualization. In this article, we will compare both PCA and t-SNE. We will see the advantages and disadvantages / limitations of t-SNE over PCA.
+
+## Advantages of t-SNE
+1. Handles Non Linear Data Efficiently: PCA is a linear algorithm. It creates Principal Components which are the linear combinations of the existing features. So, it is not able to interpret complex polynomial relationships between features. So, if the relationship between the variables is nonlinear, it performs poorly. On the other hand, t-SNE works well on non-linear data. It is a very effective non-linear dimensionality reduction algorithm. 
+PCA tries to place dissimilar data points far apart in a lower dimension representation. But in order to represent high dimension data on low dimension, non-linear manifold, it is important that similar datapoints must be represented close together, which is not what PCA does. This is done efficiently by t-SNE. So, it can efficiently capture the structure of trickier manifolds in the dataset.
+2. Preserves Local and Global Structure: t-SNE is capable to preserve local and global structure of the data. This means, roughly, that points which are close to one another in the high-dimensional dataset, will tend to be close to one another in the low dimension. On the other hand, PCA finds new dimensions that explain most of the variance in the data. So, it cares relatively little about local neighbors unlike t-SNE.
+
+## Disadvantages of t-SNE
+1. Computationally Complex: t-SNE involves a lot of calculations and computations because it computes pairwise conditional probabilities for each data point and tries to minimize the sum of the difference of the probabilities in higher and lower dimensions. “Since t-SNE scales quadratically in the number of objects N, its applicability is limited to data sets with only a few thousand input objects; beyond that, learning becomes too slow to be practical (and the memory requirements become too large)”.
+t-SNE has a quadratic time and space complexity in the number of data points. This makes it particularly slow, computationally quite heavy and resource draining while applying it to datasets comprising of more than 10,000 observations. 
+Use both PCA and t-SNE: Solution of the above problem is to use both PCA and t-SNE in conjunction. So, if you have thousands of features in a dataset, don't use t-SNE for dimensionality reduction in the first step. First use PCA to reduce the dimensions to a reasonable number of features and then run t-SNE to further reduce the dimensionality.
+2. Non-deterministic: Sometimes different runs with same hyper parameters may produce different results. So, you won't get exactly the same output each time you run it, though the results are likely to be similar.
+3. Requires Hyperparameter Tuning: t-SNE involves hyperparameters to be tuned unlike PCA (does not have any hyperparameter). Handing hyperparameters incorrectly may lead to unwanted results.
+4. Noisy Patterns: Patterns may be found in random noise as well, so multiple runs of the algorithm with different sets of hyperparameter must be checked before deciding if a pattern exists in the data.
+
+
