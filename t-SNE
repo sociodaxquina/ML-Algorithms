@@ -1,8 +1,12 @@
 ## t-SNE
 
+# Implementation: https://towardsdatascience.com/an-introduction-to-t-sne-with-python-example-5a3a293108d1
+
+
 ###################################################################
 ## What is t-SNE? How does it work using t-Distribution?         ##
 ###################################################################
+
 https://theprofessionalspoint.blogspot.com/2019/03/what-is-t-sne-how-does-it-work-using-t.html
 
 t-SNE stands for t-Distributed Stochastic Neighbor Embedding. It is a non-linear dimensionality reduction algorithm. t-SNE uses normal distribution (in higher dimension) and t-Distribution (in lower dimension) to reduce the dimensions of the dataset. We will see it in detail. 
